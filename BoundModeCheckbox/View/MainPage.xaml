@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BoundModeCheckbox.MainPage"
+             xmlns:treeview="clr-namespace:Syncfusion.Maui.TreeView;assembly=Syncfusion.Maui.TreeView"
+             xmlns:treeviewengine="clr-namespace:Syncfusion.TreeView.Engine;assembly=Syncfusion.Maui.TreeView"
+             xmlns:checkbox="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
+             xmlns:local="clr-namespace:BoundModeCheckbox">
+
+    <ContentPage.BindingContext>
+        <local:FileManagerViewModel x:Name="fileManagerViewModel"/>
+    </ContentPage.BindingContext>
+
+    <treeview:SfTreeView x:Name="treeView"
+                        ItemsSource="{Binding Folders}"
+                        AutoExpandMode="AllNodesExpanded"
+                        CheckBoxMode="Recursive"
+                        ItemTemplateContextType="Node"
+                        CheckedItems="{Binding CheckedItems}"
+                        NodePopulationMode="Instant"
+                        SelectionMode="None">
+
+        <treeview:SfTreeView.HierarchyPropertyDescriptors>
+            <treeviewengine:HierarchyPropertyDescriptor TargetType="{x:Type local:Folder}" ChildPropertyName="FilesInfo"/>
+            <treeviewengine:HierarchyPropertyDescriptor TargetType="{x:Type local:File}" ChildPropertyName="SubFiles"/>
+        </treeview:SfTreeView.HierarchyPropertyDescriptors>
+        
+        <treeview:SfTreeView.ItemTemplate >
+            <DataTemplate>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="40" />
+                        <ColumnDefinition Width="40" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0" >
+                        <checkbox:SfCheckBox VerticalOptions="Center"
+                                             HorizontalOptions="Center"
+                                             IsChecked="{Binding IsChecked, Mode=TwoWay}"/>
+                    </Grid>
+                    <Grid Grid.Column="1">
+                        <Image Source="{Binding Content.ImageIcon}"
+                               VerticalOptions="Center"
+                               HorizontalOptions="Center"
+                               HeightRequest="24" 
+                               WidthRequest="24"/>
+                    </Grid>
+                    <Grid Grid.Column="2" RowSpacing="1" Padding="1,0,0,0" VerticalOptions="Center">
+                        <Label LineBreakMode="NoWrap"
+                               Margin="5,0,0,0"
+                               Text="{Binding Content.FolderName}"
+                               CharacterSpacing="0.25" 
+                               FontFamily="Roboto-Regular" 
+                               FontSize="14"
+                               VerticalTextAlignment="Center" />
+                    </Grid>
+                </Grid>
+            </DataTemplate>
+        </treeview:SfTreeView.ItemTemplate>
+    </treeview:SfTreeView>
+
+</ContentPage>
